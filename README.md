@@ -1,80 +1,82 @@
-# osu!stable — Fixed Refresh Rate / Visual Pacing Fix
+# osu!stable — Fixed Refresh Rate / Visual Pacing Workaround
 
-A potential workaround for unusual visual pacing and approach-circle behavior in osu!stable using NVIDIA Profile Inspector.
+A **community-reported workaround** for unusually fast-feeling visual pacing and approach-circle presentation in osu!stable, using NVIDIA Profile Inspector.
 
-## The problem
+> **Status:** Confirmed as a subjective improvement on one laptop; the underlying cause has **not** been established. This does not change the actual beatmap speed, Approach Rate (AR), or hit timing.
 
-I experienced an unusual issue in osu!stable:
+## Symptoms
 
-- Approach circles appeared to show up later than expected.
-- Gameplay felt abnormally fast, even though the beatmap speed had not changed.
-- Animations felt overly fast or unusually smooth.
-- Mouse sensitivity was not the main issue.
-- The game remained playable, but the visual timing felt different from what I was used to.
+On my system, osu!stable felt different despite using the same beatmaps and sensitivity:
 
-## What fixed it for me
+- Approach circles seemed to appear later than I was used to.
+- The animation felt too fast, even though gameplay was smooth.
+- The issue felt visual rather than mouse-related.
 
-Changing the following settings in **NVIDIA Profile Inspector** restored the familiar gameplay feel on my system.
+## The setting that helped
 
-### Settings
+1. Close osu!stable.
+2. Open **NVIDIA Profile Inspector** and select the **osu!** profile. Confirm the profile applies to the actual game executable (`osu!.exe`).
+3. **Export/back up your existing profile** before editing it.
+4. Set the following **per-game** options:
 
-Open the `osu!` application profile and locate the G-SYNC settings.
+   | Option | Value |
+   | --- | --- |
+   | `GSYNC - Application Requested State` | `Fixed Refresh Rate` |
+   | `GSYNC - Application State` | `Fixed Refresh Rate` |
 
-| Setting | Value |
-|---|---|
-| GSYNC - Application Requested State | Fixed Refresh Rate |
-| GSYNC - Application State | Fixed Refresh Rate |
+5. Click **Apply Changes**, reopen osu!stable, and compare the *same beatmap with the same mods and frame limiter*.
 
-Then click **Apply Changes** and restart osu!stable.
+### Screenshot
 
-### My test environment
+![NVIDIA Profile Inspector showing the two Fixed Refresh Rate settings](images/nvidia-gsync-fixed-refresh.png)
 
-- Laptop: ASUS TUF Dash F15 FX516PC
-- GPU: NVIDIA GeForce RTX 3050 Laptop GPU
-- Integrated GPU: Intel Iris Xe Graphics
-- Game: osu!stable
-- Display refresh rate: 144 Hz
-- Compatibility Mode: Enabled
+The screenshot includes other G-SYNC-related settings for context. **Only the two rows above are the specific workaround being reported here.** Don't blindly copy every value shown.
 
-## Result
+## Test system
 
-On my system, the difference was immediately noticeable.
+| Component | Configuration |
+| --- | --- |
+| Laptop | ASUS TUF Dash F15 FX516PC |
+| GPU | NVIDIA GeForce RTX 3050 Laptop GPU |
+| Integrated GPU | Intel Iris Xe Graphics |
+| Display | 144 Hz internal display |
+| Game | osu!stable |
+| Compatibility Mode | Enabled during the reported test |
 
-After applying Fixed Refresh Rate, osu!stable felt like it used to:
+**Reported outcome:** The original player perceived normal, familiar approach-circle presentation again, without sacrificing smoothness or changing mouse sensitivity.
 
-- Approach-circle behavior felt normal again.
-- The unusual fast-paced visual feeling disappeared.
-- Gameplay remained smooth.
-- I did not need to change mouse sensitivity.
+## What this does *not* prove
 
-## Possible explanation
+- There is no measured evidence here that the game's actual AR, song speed, or object timing changed.
+- There is no confirmed diagnosis of G-SYNC or VRR as the root cause. On hybrid-GPU laptops, the internal display may not be driven directly by the NVIDIA GPU, and the driver option may not have an effect on all systems.
+- Other settings (refresh rate override, game renderer, FPS limiter, display path, and driver version) can affect perceived visual pacing. One successful test does not establish a universal fix.
 
-The improvement may be related to variable refresh rate configuration, frame presentation, or driver-level display synchronization.
+## Revert
 
-However, this is a personal observation, not a verified root-cause analysis.
+1. Close osu!stable.
+2. In NVIDIA Profile Inspector, restore the saved osu! profile or individually restore the original values for the two settings.
+3. Click **Apply Changes** and reopen the game.
 
-**These settings do not change the beatmap's actual Approach Rate, playback speed, or hit timing.**
+## Help validate this workaround
 
-The workaround may have no effect on systems without an active G-SYNC or compatible variable refresh rate display path.
+If you try it, consider [opening an issue](../../issues/new) and include:
 
-## How to revert
+| Field | Your result |
+| --- | --- |
+| GPU / driver version | |
+| Internal or external display; refresh rate | |
+| G-SYNC/VRR supported and enabled? | |
+| osu!stable Compatibility Mode on/off | |
+| FPS limiter and VSync | |
+| Before vs. after behavior | |
+| Did reverting the change bring the old behavior back? | |
 
-1. Open NVIDIA Profile Inspector.
-2. Select the `osu!` profile.
-3. Restore the original values of both G-SYNC settings.
-4. Click **Apply Changes**.
-5. Restart osu!stable.
+**Suggested A/B/A test:** Record your original profile (A), switch only the two settings (B), then restore the original values (A). Keep the beatmap, mods, frame limiter, refresh rate, and osu! version unchanged between tests. A repeated improvement is more informative than a single impression.
 
-Export your original NVIDIA profile before making changes.
+## Related finding
 
-## Community testing
+A separate, earlier community experiment involved osu!stable's refresh-rate override configuration: [osu-stable-refresh-rate-override-fix](https://github.com/malori123321/osu-stable-refresh-rate-override-fix). **It is a different setting and should be tested separately**, not combined with this change in a single A/B test.
 
-If you experience similar symptoms, please test this workaround and report:
+---
 
-- GPU model
-- Display refresh rate
-- Whether G-SYNC / VRR is supported and enabled
-- osu!stable Compatibility Mode status
-- Whether the workaround made a difference
-
-This is an unofficial community workaround and is not affiliated with NVIDIA or osu!.
+Unofficial community documentation. Not affiliated with osu! or NVIDIA. Modify driver profile settings at your own discretion.
