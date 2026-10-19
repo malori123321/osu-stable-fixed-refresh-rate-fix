@@ -17,20 +17,25 @@ On my system, osu!stable felt different despite using the same beatmaps and sens
 1. Close osu!stable.
 2. Open **NVIDIA Profile Inspector** and select the **osu!** profile. Confirm the profile applies to the actual game executable (`osu!.exe`).
 3. **Export/back up your existing profile** before editing it.
-4. Set the following **per-game** options:
+4. Record the following **complete set of values from the working profile**:
 
-   | Option | Value |
+   | Option | Working value |
    | --- | --- |
    | `GSYNC - Application Requested State` | `Fixed Refresh Rate` |
    | `GSYNC - Application State` | `Fixed Refresh Rate` |
+   | `GSYNC - Global Feature` | `On` |
+   | `GSYNC - Application Mode` | `Fullscreen and Windowed` |
+   | `GSYNC - Global Mode` | `Fullscreen and Windowed` |
+
+   **Important:** The two `Fixed Refresh Rate` rows are the main suspected workaround. The three remaining G-SYNC settings document the configuration present during the successful test; they have **not been independently isolated** as necessary for the improvement. `Global`-named options should not be changed indiscriminately since they may influence behavior beyond this game profile.
 
 5. Click **Apply Changes**, reopen osu!stable, and compare the *same beatmap with the same mods and frame limiter*.
 
 ### Screenshot
 
-![NVIDIA Profile Inspector showing the two Fixed Refresh Rate settings](images/nvidia-gsync-fixed-refresh.png)
+![NVIDIA Profile Inspector showing the complete G-SYNC configuration](images/nvidia-gsync-fixed-refresh.png)
 
-The screenshot includes other G-SYNC-related settings for context. **Only the two rows above are the specific workaround being reported here.** Don't blindly copy every value shown.
+The screenshot shows the settings used in the successful test, including both application and global G-SYNC modes. It does **not** establish which individual option caused the improvement.
 
 ## Test system
 
@@ -54,7 +59,7 @@ The screenshot includes other G-SYNC-related settings for context. **Only the tw
 ## Revert
 
 1. Close osu!stable.
-2. In NVIDIA Profile Inspector, restore the saved osu! profile or individually restore the original values for the two settings.
+2. In NVIDIA Profile Inspector, restore the saved osu! profile or individually restore the original values of every setting you changed.
 3. Click **Apply Changes** and reopen the game.
 
 ## Help validate this workaround
@@ -71,7 +76,7 @@ If you try it, consider [opening an issue](../../issues/new) and include:
 | Before vs. after behavior | |
 | Did reverting the change bring the old behavior back? | |
 
-**Suggested A/B/A test:** Record your original profile (A), switch only the two settings (B), then restore the original values (A). Keep the beatmap, mods, frame limiter, refresh rate, and osu! version unchanged between tests. A repeated improvement is more informative than a single impression.
+**Suggested A/B/A test:** Record your original profile (A), apply the documented working configuration (B), then restore the original values (A). Keep the beatmap, mods, frame limiter, refresh rate, and osu! version unchanged between tests. A repeated improvement is more informative than a single impression. To isolate the cause, later test one setting at a time.
 
 ## Related finding
 
